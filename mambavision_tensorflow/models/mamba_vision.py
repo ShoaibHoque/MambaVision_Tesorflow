@@ -21,6 +21,7 @@ from tensorflow.keras.layers.experimental import SyncBatchNormalization as Batch
 from mamba_ssm.ops.selective_scan_interface import selective_scan_fn
 from .registry import register_pip_model, register_model
 import os
+
 def _cfg(url='', **kwargs):
     return {'url': url,
             'num_classes': 1000,
@@ -656,6 +657,11 @@ class MambaVision(Model):
                          strict=strict)
 
 
+# Function to get the pretrained configuration
+def resolve_pretrained_cfg(model_name):
+    return default_cfgs.get(model_name, {})
+
+# Example for one model registration function
 @register_pip_model
 @register_model
 def mamba_vision_T(pretrained=False, **kwargs):
@@ -672,13 +678,14 @@ def mamba_vision_T(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_T')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_T_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
 
+# Repeat the same pattern for other models
 @register_pip_model
 @register_model
 def mamba_vision_T2(pretrained=False, **kwargs):
@@ -695,9 +702,9 @@ def mamba_vision_T2(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T2.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_T2')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_T2_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
@@ -718,9 +725,9 @@ def mamba_vision_S(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_S.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_S')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_S_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
@@ -743,9 +750,9 @@ def mamba_vision_B(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_B.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_B')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_B_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
@@ -768,9 +775,9 @@ def mamba_vision_L(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_L')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_L_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
@@ -793,9 +800,9 @@ def mamba_vision_L2(pretrained=False, **kwargs):
     )
     if pretrained:
         model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L2.h5")
+        cfg = resolve_pretrained_cfg('mamba_vision_L2')
         if not os.path.isfile(model_path):
-            # Replace with the appropriate URL for your model's weights
-            url = "https://example.com/path/to/mamba_vision_L2_weights.h5"
+            url = cfg.get('url', '')
             tf.keras.utils.get_file(model_path, url)
         model._load_state_dict(model_path)
     return model
