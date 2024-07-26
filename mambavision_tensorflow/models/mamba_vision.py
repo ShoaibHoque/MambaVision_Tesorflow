@@ -18,7 +18,9 @@ import logging
 from tensorflow.keras import layers, Model
 from tensorflow.keras.initializers import TruncatedNormal, Constant
 from tensorflow.keras.layers.experimental import SyncBatchNormalization as BatchNormalization
-
+from mamba_ssm.ops.selective_scan_interface import selective_scan_fn
+from .registry import register_pip_model, register_model
+import os
 def _cfg(url='', **kwargs):
     return {'url': url,
             'num_classes': 1000,
@@ -400,8 +402,8 @@ class Attention(layers.Layer):
         self.fused_attn = True
 
         self.qkv = layers.Dense(dim * 3, use_bias=qkv_bias)
-        self.q_norm = norm_layer(axis=-1) if qk_norm else tf.keras.layers.Layer()
-        self.k_norm = norm_layer(axis=-1) if qk_norm else tf.keras.layers.Layer()
+        self.q_norm = norm_layer(axis=-1) if qk_norm else layers.Layer()
+        self.k_norm = norm_layer(axis=-1) if qk_norm else layers.Layer()
         self.attn_drop = layers.Dropout(attn_drop)
         self.proj = layers.Dense(dim)
         self.proj_drop = layers.Dropout(proj_drop)
@@ -649,13 +651,12 @@ class MambaVision(Model):
         return x
 
     def load_state_dict(self, pretrained, strict=False):
-        # Implement the load state dict logic
-        pass
+        _load_checkpoint(self, 
+                         pretrained, 
+                         strict=strict)
 
-def register_model(fn):
-    # Assuming a registration function decorator is available
-    return fn
 
+@register_pip_model
 @register_model
 def mamba_vision_T(pretrained=False, **kwargs):
     model = MambaVision(
@@ -665,13 +666,20 @@ def mamba_vision_T(pretrained=False, **kwargs):
         dim=80,
         in_dim=32,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.2,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_T_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
 
+@register_pip_model
 @register_model
 def mamba_vision_T2(pretrained=False, **kwargs):
     model = MambaVision(
@@ -681,13 +689,20 @@ def mamba_vision_T2(pretrained=False, **kwargs):
         dim=80,
         in_dim=32,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.2,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T2.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_T2.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_T2_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
 
+@register_pip_model
 @register_model
 def mamba_vision_S(pretrained=False, **kwargs):
     model = MambaVision(
@@ -697,13 +712,20 @@ def mamba_vision_S(pretrained=False, **kwargs):
         dim=96,
         in_dim=64,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.2,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_S.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_S.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_S_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
 
+@register_pip_model
 @register_model
 def mamba_vision_B(pretrained=False, **kwargs):
     model = MambaVision(
@@ -713,15 +735,22 @@ def mamba_vision_B(pretrained=False, **kwargs):
         dim=128,
         in_dim=64,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.3,
         layer_scale=1e-5,
         layer_scale_conv=None,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_B.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_B.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_B_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
 
+@register_pip_model
 @register_model
 def mamba_vision_L(pretrained=False, **kwargs):
     model = MambaVision(
@@ -731,15 +760,22 @@ def mamba_vision_L(pretrained=False, **kwargs):
         dim=196,
         in_dim=64,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.3,
         layer_scale=1e-5,
         layer_scale_conv=None,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_L_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
 
+@register_pip_model
 @register_model
 def mamba_vision_L2(pretrained=False, **kwargs):
     model = MambaVision(
@@ -749,11 +785,17 @@ def mamba_vision_L2(pretrained=False, **kwargs):
         dim=196,
         in_dim=64,
         mlp_ratio=4,
+        resolution=224,
         drop_path_rate=0.3,
         layer_scale=1e-5,
         layer_scale_conv=None,
-        **kwargs)
+        **kwargs
+    )
     if pretrained:
-        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L2.pth.tar")
-        # Load pretrained weights
+        model_path = kwargs.pop("model_path", "/tmp/mamba_vision_L2.h5")
+        if not os.path.isfile(model_path):
+            # Replace with the appropriate URL for your model's weights
+            url = "https://example.com/path/to/mamba_vision_L2_weights.h5"
+            tf.keras.utils.get_file(model_path, url)
+        model._load_state_dict(model_path)
     return model
