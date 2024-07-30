@@ -1,0 +1,11 @@
+tensorflow
+tensorflow-addons
+tensorflow-datasets
+pillow
+numpy
+h5py
+lmdb
+logging
+mamba_ssm @ git+https://github.com/path/to/mamba_ssm.git#egg=mamba_ssm
+pyyaml
+argparse
